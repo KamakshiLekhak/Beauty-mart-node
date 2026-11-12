@@ -21,6 +21,10 @@ export async function addBrand(req: Request, res: Response) {
 export async function updateBrand(req: Request, res: Response) {
   const id = idSchema.parse(req.params.id);
   const body = updateBrandSchema.parse(req.body);
+  const existingBrand = await adminService.getBrandBySlug(body.slug);
+  if (existingBrand && existingBrand.id != id) {
+    res.status(409).json({ message: "This slug already exists!!" });
+  }
   const updatedBrand = await adminService.updateBrand(id, body);
   if (!updatedBrand) {
     return res.status(404).json({ message: "The brand doesnot exist" });
@@ -31,9 +35,14 @@ export async function updateBrand(req: Request, res: Response) {
 export async function updateCategory(req: Request, res: Response) {
   const id = idSchema.parse(req.params.id);
   const body = updateCategorySchema.parse(req.body);
+  const existingCategory = await adminService.getCategoryBySlug(body.slug);
+  if (existingCategory && existingCategory.id != id) {
+    res.status(409).json({ message: "This slug already exists!!" });
+  }
   const updatedCategory = await adminService.updateCategory(id, body);
   if (!updatedCategory) {
     res.status(404).json("This category doesnot exist");
   }
+
   return res.status(200).json({ data: updatedCategory });
 }

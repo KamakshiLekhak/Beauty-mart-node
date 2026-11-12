@@ -31,3 +31,13 @@ export async function updateCategory(
 ): Promise<Category | null> {
   return prisma.category.update({ where: { id: id }, data: body });
 }
+
+export async function getBrandBySlug(slug: string): Promise<Brand | null> {
+  return prisma.brand.findFirst({ where: { slug: slug } });
+}
+
+export async function getCategoryBySlug(
+  slug: string,
+): Promise<Category | null> {
+  return prisma.category.findFirst({ where: { slug: slug } });
+}

@@ -33,3 +33,12 @@ export async function updateCategory(
   body.slug = body.slug.toLowerCase();
   return await adminRepository.updateCategory(id, body);
 }
+
+export async function getBrandBySlug(slug: string): Promise<Brand | null> {
+  return await adminRepository.getBrandBySlug(slug);
+}
+export async function getCategoryBySlug(
+  slug: string,
+): Promise<Category | null> {
+  return await adminRepository.getCategoryBySlug(slug);
+}
