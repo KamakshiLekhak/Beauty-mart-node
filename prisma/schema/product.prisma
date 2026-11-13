@@ -7,7 +7,7 @@ model Product {
     categoryId      Int              @map("category_id")
     skinTypes       String[]         @map("skin_types")
     concerns        String[]
-    startingPrice   Decimal          @map("starting_price") @db.Decimal(10, 2)
+    startingPrice   Decimal?          @map("starting_price") @db.Decimal(10, 2)
     rating          Float            @default(0)
     reviewCount     Int              @map("review_count")
     isActive        Boolean          @default(true) @map("is_active")
