@@ -12,3 +12,5 @@ export async function getCategories(): Promise<Category[]> {
     orderBy: { id: "asc" },
   });
 }
+
+

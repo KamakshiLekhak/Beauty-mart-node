@@ -2,7 +2,8 @@ import type { Request, Response } from "express";
 import {
   brandRequestSchema,
   categoryRequestSchema,
-  idSchema,
+  idSchemaInUrl,
+  productCreateSchema,
   updateBrandSchema,
   updateCategorySchema,
 } from "../schemas/admin.schema.ts";
@@ -19,7 +20,7 @@ export async function addBrand(req: Request, res: Response) {
 }
 
 export async function updateBrand(req: Request, res: Response) {
-  const id = idSchema.parse(req.params.id);
+  const id = idSchemaInUrl.parse(req.params.id);
   const body = updateBrandSchema.parse(req.body);
   const existingBrand = await adminService.getBrandBySlug(body.slug);
   if (existingBrand && existingBrand.id != id) {
@@ -33,7 +34,7 @@ export async function updateBrand(req: Request, res: Response) {
 }
 
 export async function updateCategory(req: Request, res: Response) {
-  const id = idSchema.parse(req.params.id);
+  const id = idSchemaInUrl.parse(req.params.id);
   const body = updateCategorySchema.parse(req.body);
   const existingCategory = await adminService.getCategoryBySlug(body.slug);
   if (existingCategory && existingCategory.id != id) {
@@ -45,4 +46,10 @@ export async function updateCategory(req: Request, res: Response) {
   }
 
   return res.status(200).json({ data: updatedCategory });
+}
+
+export async function addProduct(req: Request, res: Response) {
+  const body = productCreateSchema.parse(req.body);
+  const addedProduct = await adminService.addProuct(body);
+  return res.json({ data: addedProduct });
 }

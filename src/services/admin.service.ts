@@ -3,9 +3,11 @@ import type {
   BrandUpdate,
   CategoryRequest,
   CategoryUpdate,
+  CreateProduct,
 } from "../schemas/admin.schema.ts";
 import * as adminRepository from "../repositories/admin.repository.ts";
-import type { Brand, Category } from "../generated/prisma/client.ts";
+import type { Brand, Category, Product } from "../generated/prisma/client.ts";
+import * as productRepository from "../repositories/productRepository.ts";
 
 export async function addCategory(
   categoryInput: CategoryRequest,
@@ -41,4 +43,8 @@ export async function getCategoryBySlug(
   slug: string,
 ): Promise<Category | null> {
   return await adminRepository.getCategoryBySlug(slug);
+}
+
+export async function addProuct(product: CreateProduct): Promise<Product> {
+  return await productRepository.insertProduct(product);
 }
