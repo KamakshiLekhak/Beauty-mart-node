@@ -41,3 +41,4 @@ export async function getCategoryBySlug(
 ): Promise<Category | null> {
   return prisma.category.findFirst({ where: { slug: slug } });
 }
+
