@@ -4,10 +4,17 @@ import type {
   CategoryRequest,
   CategoryUpdate,
   CreateProduct,
+  CreateProductVariant,
 } from "../schemas/admin.schema.ts";
 import * as adminRepository from "../repositories/admin.repository.ts";
-import type { Brand, Category, Product } from "../generated/prisma/client.ts";
+import type {
+  Brand,
+  Category,
+  Product,
+  ProductVariant,
+} from "../generated/prisma/client.ts";
 import * as productRepository from "../repositories/productRepository.ts";
+import * as productVariantRepository from "../repositories/productVariant.repository.ts";
 
 export async function addCategory(
   categoryInput: CategoryRequest,
@@ -47,4 +54,10 @@ export async function getCategoryBySlug(
 
 export async function addProuct(product: CreateProduct): Promise<Product> {
   return await productRepository.insertProduct(product);
+}
+export async function addProductVariant(
+  productId: number,
+  body: CreateProductVariant,
+): Promise<ProductVariant> {
+  return await productVariantRepository.insertProductVariant(productId, body);
 }

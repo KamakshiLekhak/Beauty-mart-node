@@ -1,6 +1,7 @@
-import z, { int } from "zod";
+import z, { array, int } from "zod";
 
 const commonStringValidation = z.string().trim().min(1).max(100);
+
 const basicStringArraySchema = z.array(commonStringValidation).max(10);
 export const categoryRequestSchema = z.object({
   name: commonStringValidation,
@@ -22,6 +23,7 @@ export const idSchemaInUrl = z.coerce
   .int({ error: "ID must be an integer" });
 
 export const idSchema = z.number().int().positive();
+
 export const imageSchema = z.object({
   url: commonStringValidation,
   text: commonStringValidation,
@@ -44,3 +46,27 @@ export const productCreateSchema = z.object({
 });
 
 export type CreateProduct = z.infer<typeof productCreateSchema>;
+
+const moneySchema = z
+  .number()
+  .min(0.01)
+  .max(999_999.99)
+  .multipleOf(0.01, { error: "Price must be up to to decimal places!" });
+
+export const createProductVariantSchema = z
+  .object({
+    label: commonStringValidation,
+    mrp: moneySchema,
+    price: moneySchema,
+    code: commonStringValidation,
+    images: z.array(imageSchema),
+    stock: z.int().min(0),
+  })
+  .refine(
+    (obj) => {
+      return obj.mrp >= obj.price;
+    },
+    { error: "mrp must be greater or equal to price" },
+  );
+
+export type CreateProductVariant = z.infer<typeof createProductVariantSchema>;

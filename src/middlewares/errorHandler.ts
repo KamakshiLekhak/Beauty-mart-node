@@ -14,6 +14,7 @@ export function errorHandler(
         return { path: x.path.join(), message: x.message };
       }),
     };
+  
     return res.status(400).json(errFormat);
   }
   console.error(error);
