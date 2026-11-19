@@ -1,6 +1,6 @@
 import z, { array, int } from "zod";
 
-const commonStringValidation = z.string().trim().min(1).max(100);
+export const commonStringValidation = z.string().trim().min(1).max(100);
 
 const basicStringArraySchema = z.array(commonStringValidation).max(10);
 export const categoryRequestSchema = z.object({
@@ -47,7 +47,7 @@ export const productCreateSchema = z.object({
 
 export type CreateProduct = z.infer<typeof productCreateSchema>;
 
-const moneySchema = z
+export const moneySchema = z
   .number()
   .min(0.01)
   .max(999_999.99)
