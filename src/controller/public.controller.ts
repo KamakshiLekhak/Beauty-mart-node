@@ -4,7 +4,7 @@ import { count } from "console";
 
 export async function getBrands(req: Request, res: Response) {
   const brands = await publicService.getBrands();
-  return res.status(200).json({ count: brands.length, data: brands });
+  return res.status(200).json({ data: brands });
 }
 
 export async function getCategories(req: Request, res: Response) {

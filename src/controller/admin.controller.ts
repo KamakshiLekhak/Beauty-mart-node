@@ -2,6 +2,8 @@ import type { Request, Response } from "express";
 import {
   brandRequestSchema,
   categoryRequestSchema,
+  createProductVariantSchema,
+  idSchema,
   idSchemaInUrl,
   productCreateSchema,
   updateBrandSchema,
@@ -52,4 +54,11 @@ export async function addProduct(req: Request, res: Response) {
   const body = productCreateSchema.parse(req.body);
   const addedProduct = await adminService.addProuct(body);
   return res.json({ data: addedProduct });
+}
+
+export async function addProductVariant(req: Request, res: Response) {
+  const productId = idSchemaInUrl.parse(req.params.productId);
+  const body = createProductVariantSchema.parse(req.body);
+  const productVariant = await adminService.addProductVariant(productId, body);
+  return res.json({ data: productVariant });
 }

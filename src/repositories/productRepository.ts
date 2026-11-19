@@ -27,3 +27,17 @@ export async function getAllProduct() {
     include: { images: true },
   });
 }
+
+export async function updateStartingPrice(productId: number) {
+  const minPriceProductVariant = await prisma.productVariant.findFirst({
+    where: { productId: productId },
+    orderBy: { price: "asc" },
+  });
+  const minimumPrice = minPriceProductVariant?.price ?? 0;
+  await prisma.product.update({
+    where: { id: productId },
+    data: { startingPrice: minimumPrice },
+  });
+}
+
+
