@@ -1,5 +1,13 @@
 import { prisma } from "../config/prisma.ts";
+import type {
+  ProductOrderByWithRelationInput,
+  ProductSelect,
+} from "../generated/prisma/models.ts";
 import type { CreateProduct } from "../schemas/admin.schema.ts";
+import type {
+  ProductCardResponse,
+  ProductFilter,
+} from "../schemas/product.schema.ts";
 
 export async function insertProduct(productInput: CreateProduct) {
   const { images, ...everythingElse } = productInput;
@@ -40,4 +48,60 @@ export async function updateStartingPrice(productId: number) {
   });
 }
 
+function getOrderByobject(sort: string): ProductOrderByWithRelationInput {
+  switch (sort) {
+    case "newest":
+      return { createdAt: "desc" };
+    case "price_asc":
+      return { startingPrice: "asc" };
+    case "price_desc":
+      return { startingPrice: "desc" };
+    case "rating":
+      return { rating: "desc" };
+    default:
+      return { createdAt: "desc" };
+  }
+}
+export const selectKey = {
+  id: true,
+  name: true,
+  slug: true,
+  startingPrice: true,
+  rating: true,
+  reviewCount: true,
+  brand: { select: { name: true } },
+  category: { select: { name: true } },
+  images: {
+    select: { url: true, text: true },
+    orderBy: { position: "asc" },
+  },
+  productVariants: {
+    select: { id: true, label: true, price: true, stock: true },
+  },
+} as ProductSelect;
 
+export async function filterPaginatedProducts(
+  query: ProductFilter,
+): Promise<ProductCardResponse> {
+  const whereObject = {
+    isActive: true,
+    id: query?.id ?? undefined,
+    categoryId: query?.category ?? undefined,
+    category: query.categorySlug ? { slug: query.categorySlug } : undefined,
+    brandId: query?.brand ?? undefined,
+    skinTypes: query.skinType ? { has: query.skinType } : undefined,
+    concerns: query.concern ? { has: query.concern } : undefined,
+    startingPrice: { gte: query.minPrice, lte: query.maxPrice },
+  };
+  const data = await prisma.product.findMany({
+    select: selectKey,
+    where: whereObject,
+    orderBy: getOrderByobject(query.sort),
+    skip: (query.page - 1) * query.limit,
+    take: query.limit,
+  });
+  const count = await prisma.product.count({
+    where: whereObject,
+  });
+  return { data: data, count: count };
+}
