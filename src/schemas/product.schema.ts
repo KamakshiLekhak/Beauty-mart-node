@@ -5,10 +5,12 @@ import {
   idSchemaInUrl,
   moneySchema,
 } from "./admin.schema.ts";
+import type { ProductGetPayload } from "../generated/prisma/models.ts";
+import type { selectKey } from "../repositories/productRepository.ts";
 
 export const productFilterSchema = z
   .object({
-    id : idSchemaInUrl.optional(),
+    id: idSchemaInUrl.optional(),
     category: idSchemaInUrl.optional(),
     categorySlug: commonStringValidation.optional(),
     brand: idSchemaInUrl.optional(),
@@ -35,3 +37,6 @@ export const productFilterSchema = z
   );
 
 export type ProductFilter = z.infer<typeof productFilterSchema>;
+
+export type ProductCard = ProductGetPayload<{ select: typeof selectKey }>;
+export type ProductCardResponse = { data: ProductCard[]; count: number };
