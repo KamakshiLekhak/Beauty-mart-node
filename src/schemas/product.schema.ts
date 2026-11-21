@@ -8,7 +8,9 @@ import {
 
 export const productFilterSchema = z
   .object({
+    id : idSchemaInUrl.optional(),
     category: idSchemaInUrl.optional(),
+    categorySlug: commonStringValidation.optional(),
     brand: idSchemaInUrl.optional(),
     skinType: commonStringValidation.optional(),
     concern: commonStringValidation.optional(),
