@@ -17,7 +17,7 @@ function calculateDiscount(
   if (!mrp || !price) {
     return null;
   }
-  return Math.round((mrp - price) / mrp) * 100;
+  return Math.round(((mrp - price) / mrp) * 100);
 }
 export async function filterPaginatedProducts(query: ProductFilter) {
   const { data, count } =
@@ -49,5 +49,47 @@ export async function filterPaginatedProducts(query: ProductFilter) {
       optionCount: x.productVariants.length,
     };
   });
-  return {count: count, data : returnedData}
+  return { count: count, data: returnedData };
+}
+
+function checkStock(stock: number) {
+  if (stock == 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+export async function getProductInDetail(id: number) {
+  const data = await productRepository.getProductInDetail(id);
+  if (!data) {
+    return null;
+  }
+  const variants = data?.productVariants.map((x) => {
+    return {
+      id: x.id,
+      label: x.label,
+      mrp: x.mrp,
+      price: x.price,
+      discountPercentage: calculateDiscount(
+        x.mrp.toNumber(),
+        x.price.toNumber(),
+      ),
+      inStock: checkStock(x.stock),
+    };
+  });
+  const returningData = {
+    id: data?.id,
+    name: data?.name,
+    slug: data?.slug,
+    description: data?.description,
+    skinTypes: data?.skinTypes,
+    concerns: data?.concerns,
+    rating: data?.rating,
+    reviewCount: data?.reviewCount,
+    brand: data?.brand?.name,
+    category: data?.category?.name,
+    images: data?.images[0] ?? null,
+    variants: variants,
+  };
+  return returningData;
 }
