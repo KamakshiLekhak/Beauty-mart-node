@@ -1,3 +1,4 @@
+import { tr } from "zod/locales";
 import { prisma } from "../config/prisma.ts";
 import type {
   ProductOrderByWithRelationInput,
@@ -76,7 +77,7 @@ export const selectKey = {
     orderBy: { position: "asc" },
   },
   productVariants: {
-    select: { id: true, label: true, price: true, stock: true },
+    select: { id: true, label: true, price: true, mrp: true, stock: true },
   },
 } as ProductSelect;
 
@@ -104,4 +105,19 @@ export async function filterPaginatedProducts(
     where: whereObject,
   });
   return { data: data, count: count };
+}
+const { startingPrice, ...everythingElse } = selectKey;
+export const selectKeyWithDetail = {
+  ...everythingElse,
+  skinTypes: true,
+  concerns: true,
+  description: true,
+};
+
+export async function getProductInDetail(id: number) {
+  const data = await prisma.product.findUnique({
+    select: selectKeyWithDetail,
+    where: { id: id },
+  });
+  return data;
 }
