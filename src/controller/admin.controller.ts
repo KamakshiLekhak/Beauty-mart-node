@@ -13,12 +13,14 @@ import * as adminService from "../services/admin.service.ts";
 
 export async function addCategory(req: Request, res: Response) {
   const body = categoryRequestSchema.parse(req.body);
-  return await adminService.addCategory(body);
+  const addedCategory = await adminService.addCategory(body);
+  return res.json({ data: addedCategory });
 }
 
 export async function addBrand(req: Request, res: Response) {
   const body = brandRequestSchema.parse(req.body);
-  return await adminService.addBrand(body);
+  const addedBrand = await adminService.addBrand(body);
+  return res.json({ data: addedBrand });
 }
 
 export async function updateBrand(req: Request, res: Response) {

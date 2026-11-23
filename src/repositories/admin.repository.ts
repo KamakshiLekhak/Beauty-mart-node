@@ -11,34 +11,34 @@ import type {
 export async function insertCategory(
   categoryInput: CategoryRequest,
 ): Promise<Category> {
-  return prisma.category.create({ data: categoryInput });
+  return await prisma.category.create({ data: categoryInput });
 }
 
 export async function insertBrand(brandInput: BrandRequest): Promise<Brand> {
-  return prisma.brand.create({ data: brandInput });
+  return await prisma.brand.create({ data: brandInput });
 }
 
 export async function updateBrand(
   id: number,
   body: BrandUpdate,
 ): Promise<Brand | null> {
-  return prisma.brand.update({ where: { id: id }, data: body });
+  return await prisma.brand.update({ where: { id: id }, data: body });
 }
 
 export async function updateCategory(
   id: number,
   body: CategoryUpdate,
 ): Promise<Category | null> {
-  return prisma.category.update({ where: { id: id }, data: body });
+  return await prisma.category.update({ where: { id: id }, data: body });
 }
 
 export async function getBrandBySlug(slug: string): Promise<Brand | null> {
-  return prisma.brand.findFirst({ where: { slug: slug } });
+  return await prisma.brand.findFirst({ where: { slug: slug } });
 }
 
 export async function getCategoryBySlug(
   slug: string,
 ): Promise<Category | null> {
-  return prisma.category.findFirst({ where: { slug: slug } });
+  return await prisma.category.findFirst({ where: { slug: slug } });
 }
 
