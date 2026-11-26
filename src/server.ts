@@ -8,6 +8,7 @@ import { adminRouter } from "./routes/admin.routes.ts";
 import { publicRouter } from "./routes/public.routes.ts";
 import { productRouter } from "./routes/product.router.ts";
 import { productVariantRouter } from "./routes/productVariant.router.ts";
+import { authRouter } from "./routes/auth.routes.ts";
 const app = express();
 
 app.use(express.json()); //json expect garnu bhanera, immediately garne ater above line
@@ -20,6 +21,7 @@ app.use("/admin", adminRouter);
 app.use("/", publicRouter);
 app.use("/product", productRouter);
 app.use("/productVariant", productVariantRouter);
+app.use("/auth", authRouter);
 
 app.use(notFound);
 
